@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DataService } from '../../services/data.service';
+import { StateManagementService } from '../../services/state-management.service';
 import { Trainee, TestResult } from '../../models/data.models';
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { FilterControlsComponent, FilterConfig, FilterValues } from '../../shared/components/filter-controls/filter-controls.component';
@@ -51,7 +52,7 @@ interface MonitorData {
   templateUrl: './monitor-page.html',
   styleUrl: './monitor-page.scss'
 })
-export class MonitorPage implements OnInit {
+export class MonitorPage implements OnInit, OnDestroy {
   // Filter configuration
   filterConfigs: FilterConfig[] = [
     {
@@ -85,12 +86,6 @@ export class MonitorPage implements OnInit {
     showFailed: true
   };
 
-  // Legacy filter controls (for backward compatibility)
-  selectedIds: string[] = [];
-  nameFilter: string = '';
-  showPassed: boolean = true;
-  showFailed: boolean = true;
-  
   // Available options
   availableIds: string[] = [];
   
@@ -101,11 +96,40 @@ export class MonitorPage implements OnInit {
   
   private destroyRef = inject(DestroyRef);
   
-  constructor(private dataService: DataService) {}
+  constructor(
+    private dataService: DataService,
+    private stateService: StateManagementService
+  ) {}
   
   ngOnInit(): void {
+    this.loadSavedState();
     this.loadData();
     this.setupFilterOptions();
+  }
+
+  ngOnDestroy(): void {
+    this.saveCurrentState();
+  }
+
+  private loadSavedState(): void {
+    const savedState = this.stateService.getPageState('monitor-page');
+    if (savedState) {
+      this.filterValues = {
+        selectedIds: savedState['selectedIds'] || [],
+        nameFilter: savedState['nameFilter'] || '',
+        showPassed: savedState['showPassed'] !== false, // Default to true
+        showFailed: savedState['showFailed'] !== false  // Default to true
+      };
+    }
+  }
+
+  private saveCurrentState(): void {
+    this.stateService.savePageState('monitor-page', {
+      selectedIds: this.filterValues['selectedIds'],
+      nameFilter: this.filterValues['nameFilter'],
+      showPassed: this.filterValues['showPassed'],
+      showFailed: this.filterValues['showFailed']
+    });
   }
 
   private setupFilterOptions(): void {
@@ -123,13 +147,16 @@ export class MonitorPage implements OnInit {
   }
 
   onFiltersChanged(values: FilterValues): void {
-    // Update legacy properties for backward compatibility
-    this.selectedIds = values['selectedIds'] || [];
-    this.nameFilter = values['nameFilter'] || '';
-    this.showPassed = values['showPassed'] !== false;
-    this.showFailed = values['showFailed'] !== false;
+    // Update filterValues directly
+    this.filterValues = {
+      selectedIds: values['selectedIds'] || [],
+      nameFilter: values['nameFilter'] || '',
+      showPassed: values['showPassed'] !== false,
+      showFailed: values['showFailed'] !== false
+    };
     
     this.applyFilters();
+    this.saveCurrentState(); // Save state when filters change
   }
   
   loadData(): void {
@@ -184,35 +211,40 @@ export class MonitorPage implements OnInit {
   }
   
   applyFilters(): void {
+    const selectedIds = this.filterValues['selectedIds'] as string[];
+    const nameFilter = this.filterValues['nameFilter'] as string;
+    const showPassed = this.filterValues['showPassed'] as boolean;
+    const showFailed = this.filterValues['showFailed'] as boolean;
+
     this.filteredData = this.monitorData.filter(item => {
       // ID filter
-      if (this.selectedIds.length > 0 && !this.selectedIds.includes(item.id.toString())) {
+      if (selectedIds.length > 0 && !selectedIds.includes(item.id.toString())) {
         return false;
       }
       
       // Name filter
-      if (this.nameFilter.trim() && !item.name.toLowerCase().includes(this.nameFilter.toLowerCase().trim())) {
+      if (nameFilter.trim() && !item.name.toLowerCase().includes(nameFilter.toLowerCase().trim())) {
         return false;
       }
       
       // Status filter
-      if (!this.showPassed && item.status === 'Passed') return false;
-      if (!this.showFailed && item.status === 'Failed') return false;
+      if (!showPassed && item.status === 'Passed') return false;
+      if (!showFailed && item.status === 'Failed') return false;
       
       return true;
     });
   }
   
-  onFiltersChange(): void {
-    this.applyFilters();
-  }
-  
   clearFilters(): void {
-    this.selectedIds = [];
-    this.nameFilter = '';
-    this.showPassed = true;
-    this.showFailed = true;
+    this.filterValues = {
+      selectedIds: [],
+      nameFilter: '',
+      showPassed: true,
+      showFailed: true
+    };
+    
     this.applyFilters();
+    this.saveCurrentState(); // Save state when filters are cleared
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DataService } from '../../services/data.service';
+import { StateManagementService } from '../../services/state-management.service';
 import { TestResult } from '../../models/data.models';
 import { GradeUtils } from '../../shared/utils/grade.utils';
 import { FilterControlsComponent, FilterConfig, FilterValues } from '../../shared/components/filter-controls/filter-controls.component';
@@ -49,7 +50,7 @@ interface ChartData {
   templateUrl: './analysis-page.html',
   styleUrl: './analysis-page.scss'
 })
-export class AnalysisPage implements OnInit {
+export class AnalysisPage implements OnInit, OnDestroy {
   // Filter configuration
   filterConfigs: FilterConfig[] = [
     {
@@ -85,13 +86,39 @@ export class AnalysisPage implements OnInit {
   
   private destroyRef = inject(DestroyRef);
   
-  constructor(private dataService: DataService) {}
+  constructor(
+    private dataService: DataService,
+    private stateService: StateManagementService
+  ) {}
   
   ngOnInit(): void {
+    this.loadSavedState();
     this.loadChartData();
     this.loadAvailableIds();
     this.loadAvailableSubjects();
     this.setupFilterOptions();
+  }
+
+  ngOnDestroy(): void {
+    this.saveCurrentState();
+  }
+
+  private loadSavedState(): void {
+    const savedState = this.stateService.getPageState('analysis-page');
+    if (savedState) {
+      this.selectedIds = savedState['selectedIds'] || [];
+      this.selectedSubjects = savedState['selectedSubjects'] || [];
+      this.filterValues['selectedIds'] = this.selectedIds;
+      this.filterValues['selectedSubjects'] = this.selectedSubjects;
+    }
+  }
+
+  private saveCurrentState(): void {
+    this.stateService.savePageState('analysis-page', {
+      selectedIds: this.selectedIds,
+      selectedSubjects: this.selectedSubjects,
+      filterValues: this.filterValues
+    });
   }
 
   private setupFilterOptions(): void {
@@ -119,6 +146,7 @@ export class AnalysisPage implements OnInit {
     this.selectedSubjects = values['selectedSubjects'] || [];
     
     this.updateChartsData();
+    this.saveCurrentState(); // Save state when filters change
   }
   
   loadAvailableIds(): void {
