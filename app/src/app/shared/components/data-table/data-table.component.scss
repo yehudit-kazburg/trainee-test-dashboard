@@ -27,10 +27,20 @@ table {
 .mat-mdc-row:hover {
   background-color: #f5f5f5;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.selected-row {
+// Try multiple selectors for selected row to ensure it works
+.selected-row,
+tr.selected-row,
+.mat-mdc-row.selected-row {
   background-color: #e3f2fd !important;
+  border-left: 4px solid #1976d2 !important;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: #bbdefb !important;
+  }
 }
 
 // Grade Color Classes

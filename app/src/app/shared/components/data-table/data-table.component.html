@@ -19,18 +19,15 @@
         <!-- Selection Column -->
         <ng-container matColumnDef="select" *ngIf="config.showSelection">
           <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox 
-              (change)="masterToggle()"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
+            Select
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox 
+            <mat-radio-button 
               (click)="$event.stopPropagation()"
-              (change)="onSelectionChange(row, $event)"
-              [checked]="selection.isSelected(row)">
-            </mat-checkbox>
+              (change)="onRowSelection(row, $event)"
+              [checked]="selection.isSelected(row)"
+              name="tableSelection">
+            </mat-radio-button>
           </td>
         </ng-container>
 
@@ -43,8 +40,7 @@
           </th>
           <td mat-cell 
               *matCellDef="let element" 
-              [ngClass]="getCellClass(element, column)"
-              (click)="onRowClick(element)">
+              [ngClass]="getCellClass(element, column)">
             <ng-container [ngSwitch]="column.type">
               <!-- Grade Type -->
               <span *ngSwitchCase="'grade'" 
@@ -74,6 +70,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row 
             *matRowDef="let row; columns: displayedColumns;"
+            [class.selected-row]="selectedRow === row"
             [ngClass]="getRowClass(row)"
             (click)="onRowClick(row)">
         </tr>

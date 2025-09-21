@@ -160,10 +160,7 @@
       background-color: #f0f0f0;
     }
     
-    &.selected {
-      background-color: #e3f2fd;
-      border-left: 4px solid #1976d2;
-    }
+    // Selected row styling is now handled by data-table component
   }
   
   // Specific column alignments

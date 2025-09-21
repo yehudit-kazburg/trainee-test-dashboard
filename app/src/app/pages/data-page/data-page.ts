@@ -68,7 +68,7 @@ export class DataPage implements OnInit, OnDestroy {
 
   tableConfig: TableConfig = {
     columns: this.tableColumns,
-    showSelection: true,
+    showSelection: false, // Remove selection column - use row click instead
     showPagination: true,
     pageSize: 10
   };
@@ -155,11 +155,14 @@ export class DataPage implements OnInit, OnDestroy {
   }
 
   selectRow(result: TestResult): void {
+    // Set selection: clicking on a row always selects it
     this.selectedResult = result;
   }
 
   onSelectionChange(selectedRows: any[]): void {
-    this.selectedResult = selectedRows.length > 0 ? selectedRows[0] : null;
+    // This method is no longer used since we removed the selection column
+    // Kept for compatibility if needed later
+    console.log('DataPage: onSelectionChange called (should not happen):', selectedRows);
   }
 
   addTrainee(): void {

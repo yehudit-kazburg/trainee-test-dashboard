@@ -42,6 +42,7 @@
         <app-data-table
           [data]="tableData"
           [config]="tableConfig"
+          [selectedRow]="selectedResult"
           (rowClick)="selectRow($event)"
           (selectionChange)="onSelectionChange($event)"
           (pageChange)="onPageChange($event)">

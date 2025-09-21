@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { SelectionModel } from '@angular/cdk/collections';
 import { GradeUtils } from '../../utils/grade.utils';
 import { GradeClassPipe } from '../../pipes/grade.pipes';
@@ -44,6 +45,7 @@ export interface TableConfig {
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatRadioModule,
     GradeClassPipe
   ],
   templateUrl: './data-table.component.html',
@@ -62,7 +64,7 @@ export class DataTableComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<any>([]);
-  selection = new SelectionModel<any>(true, []);
+  selection = new SelectionModel<any>(false, []); // false = single selection only
   displayedColumns: string[] = [];
 
   ngOnInit(): void {
@@ -76,6 +78,12 @@ export class DataTableComponent implements OnInit, OnChanges, AfterViewInit {
     
     if (changes['config']) {
       this.setupTable();
+    }
+
+    if (changes['selectedRow']) {
+      console.log('DataTable: selectedRow changed from:', changes['selectedRow'].previousValue, 'to:', changes['selectedRow'].currentValue);
+      // Force change detection for row classes
+      this.dataSource._updateChangeSubscription();
     }
   }
 
@@ -109,26 +117,41 @@ export class DataTableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   onRowClick(row: any): void {
+    // Don't manage selection internally - let parent handle it
+    console.log('DataTable: Row clicked, emitting:', row);
     this.rowClick.emit(row);
   }
 
   onSelectionChange(row: any, event: any): void {
     if (event) {
-      this.selection.toggle(row);
+      // For single selection, clear previous selection and select new row
+      if (event.checked) {
+        this.selection.clear();
+        this.selection.select(row);
+      } else {
+        this.selection.deselect(row);
+      }
       this.selectionChange.emit(this.selection.selected);
     }
+  }
+
+  onRowSelection(row: any, event: any): void {
+    // For radio button selection - always select the clicked row
+    this.selection.clear();
+    if (event.value) {
+      this.selection.select(row);
+    }
+    this.selectionChange.emit(this.selection.selected);
   }
 
   onPageChange(event: PageEvent): void {
     this.pageChange.emit(event);
   }
 
-  // Selection Methods
+  // Selection Methods (Single Selection Mode)
   masterToggle(): void {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-    
+    // For single selection mode, just clear all selections
+    this.selection.clear();
     this.selectionChange.emit(this.selection.selected);
   }
 
@@ -144,9 +167,12 @@ export class DataTableComponent implements OnInit, OnChanges, AfterViewInit {
     
     if (this.selectedRow && this.selectedRow === row) {
       classes.push('selected-row');
+      console.log('DataTable: Adding selected-row class to:', row);
     }
     
-    return classes.join(' ');
+    const result = classes.join(' ');
+    // console.log('DataTable: Row class result:', result, 'for row:', row);
+    return result;
   }
 
   getCellClass(element: any, column: TableColumn): string {
