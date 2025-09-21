@@ -43,8 +43,10 @@
           [data]="tableData"
           [config]="tableConfig"
           [selectedRow]="selectedResult"
+          [totalResults]="totalResults"
+          [currentPage]="currentPage"
+          [pageSize]="pageSize"
           (rowClick)="selectRow($event)"
-          (selectionChange)="onSelectionChange($event)"
           (pageChange)="onPageChange($event)">
         </app-data-table>
       </mat-card-content>
