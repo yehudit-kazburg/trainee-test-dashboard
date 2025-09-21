@@ -1,0 +1,288 @@
+// Shared component styles
+// This file contains common UI patterns used across multiple pages
+
+// Page Header Pattern
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  
+  h1 {
+    margin: 0;
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    margin: 0;
+    color: #1976d2;
+    font-weight: 400;
+    font-size: 1.5rem;
+  }
+}
+
+// Action Buttons Pattern
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  
+  .mat-mdc-button, .mat-mdc-raised-button {
+    min-width: 120px;
+  }
+}
+
+// Filter Card Pattern
+.filter-card {
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+  mat-card-content {
+    padding: 16px;
+  }
+}
+
+// Controls Section Pattern (for forms and filters)
+.controls-section {
+  margin-bottom: 24px;
+  
+  .controls-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #424242;
+  }
+}
+
+// Controls Row Pattern
+.controls-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  
+  mat-form-field {
+    min-width: 200px;
+    flex: 1;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+  }
+}
+
+// Main Content Container Pattern
+.main-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  
+  &.single-column {
+    flex-direction: column;
+  }
+  
+  &.responsive {
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+}
+
+// Data Table Container Pattern
+.data-table-container {
+  flex: 1;
+  min-height: 600px;
+  
+  mat-card {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+}
+
+// Details Panel Pattern
+.details-panel {
+  flex: 0 0 350px;
+  min-height: 600px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+  .details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+    h3 {
+      margin: 0;
+      color: #1976d2;
+    }
+  }
+  
+  .details-content {
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .label {
+        font-weight: 500;
+        color: #424242;
+      }
+      
+      .value {
+        color: #666;
+      }
+    }
+  }
+}
+
+// Summary Cards Pattern
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  
+  .summary-card {
+    padding: 20px;
+    text-align: center;
+    
+    .summary-title {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .summary-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #1976d2;
+    }
+  }
+}
+
+// Grade Styling Pattern
+.grade {
+  &.grade-excellent {
+    color: #4caf50;
+    font-weight: bold;
+  }
+  
+  &.grade-good {
+    color: #ff9800;
+    font-weight: bold;
+  }
+  
+  &.grade-poor {
+    color: #f44336;
+    font-weight: bold;
+  }
+}
+
+// Responsive Design Patterns
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    
+    h1, h2 {
+      text-align: center;
+    }
+  }
+  
+  .action-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .controls-row {
+    flex-direction: column;
+    
+    mat-form-field {
+      min-width: 100%;
+    }
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .details-panel {
+    flex: 1;
+    order: 2;
+  }
+}
+
+// Loading State Pattern
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  
+  mat-spinner {
+    margin: 20px;
+  }
+}
+
+// Empty State Pattern
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+  
+  .empty-title {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .empty-message {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+}
+
+// Animation Patterns
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

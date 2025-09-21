@@ -1,0 +1,18 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title class="dialog-title">
+    <mat-icon>person_add</mat-icon>
+    {{ data ? 'Edit Trainee' : 'Add New Trainee' }}
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    <app-trainee-form 
+      [initialData]="initialData"
+      [isEditMode]="!!data"
+      [showButtons]="true"
+      [submitButtonText]="data ? 'Update' : 'Save'"
+      [cancelButtonText]="'Cancel'"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()">
+    </app-trainee-form>
+  </mat-dialog-content>
+</div>

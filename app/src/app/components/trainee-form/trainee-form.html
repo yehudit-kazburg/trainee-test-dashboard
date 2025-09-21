@@ -1,0 +1,75 @@
+<form [formGroup]="traineeForm" class="trainee-form">
+  
+  <!-- Personal Information -->
+  <div class="form-section">
+    <h3>Personal Information</h3>
+    
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Trainee ID</mat-label>
+        <input matInput formControlName="traineeId" type="number" [readonly]="isEditMode">
+        <mat-error>{{getFieldError('traineeId')}}</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="traineeName">
+        <mat-error>{{getFieldError('traineeName')}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Academic Information -->
+  <div class="form-section">
+    <h3>Academic Information</h3>
+    
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Subject</mat-label>
+        <mat-select formControlName="subject" [disabled]="isLoadingSubjects">
+          <mat-option *ngIf="isLoadingSubjects" disabled>
+            Loading subjects...
+          </mat-option>
+          <mat-option *ngFor="let subject of subjects" [value]="subject">
+            {{subject}}
+          </mat-option>
+        </mat-select>
+        <mat-error>{{getFieldError('subject')}}</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Grade (0-100)</mat-label>
+        <input matInput formControlName="grade" type="number" min="0" max="100">
+        <mat-error>{{getFieldError('grade')}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Test Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="testDate">
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>{{getFieldError('testDate')}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="form-actions" *ngIf="showButtons">
+    <button mat-raised-button color="primary" 
+            [disabled]="!isFormValid" 
+            (click)="onSubmit()"
+            type="button">
+      <mat-icon>save</mat-icon>
+      {{submitButtonText}}
+    </button>
+    
+    <button mat-stroked-button (click)="onCancel()" type="button">
+      <mat-icon>cancel</mat-icon>
+      {{cancelButtonText}}
+    </button>
+  </div>
+
+</form>

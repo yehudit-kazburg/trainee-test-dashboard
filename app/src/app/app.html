@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" class="main-toolbar">
+  <span>{{ title }}</span>
+  
+  <div class="toolbar-spacer"></div>
+  
+  <nav class="nav-buttons">
+    <button mat-button 
+            routerLink="/data" 
+            routerLinkActive="active-nav-button"
+            class="nav-button">
+      <mat-icon>table_view</mat-icon>
+      Data
+    </button>
+    
+    <button mat-button 
+            routerLink="/analysis" 
+            routerLinkActive="active-nav-button"
+            class="nav-button">
+      <mat-icon>analytics</mat-icon>
+      Analysis
+    </button>
+    
+    <button mat-button 
+            routerLink="/monitor" 
+            routerLinkActive="active-nav-button"
+            class="nav-button">
+      <mat-icon>monitor</mat-icon>
+      Monitor
+    </button>
+  </nav>
+</mat-toolbar>
+
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>

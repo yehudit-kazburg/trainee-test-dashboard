@@ -1,0 +1,110 @@
+<div class="data-page-container">
+  <!-- Header with Actions -->
+  <div class="page-header">
+    <h1>Student Data Management</h1>
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="addTrainee()">
+        <mat-icon>person_add</mat-icon>
+        Add Student
+      </button>
+      <button mat-raised-button color="warn" [disabled]="!selectedResult" (click)="removeTestResult()">
+        <mat-icon>delete</mat-icon>
+        Delete Test Result
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Section -->
+  <mat-card class="filter-card">
+    <mat-card-header>
+      <mat-card-title>Data Filter</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="full-width">
+        <mat-label>Search (supports ID:, Grade >/<, Date >/<)</mat-label>
+        <input matInput 
+               [(ngModel)]="filterText" 
+               (input)="onFilterChange()"
+               placeholder="Example: ID:123, Grade >80, Date >2024-01-01, or free text">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main Content Area with Side Layout -->
+  <div class="main-content">
+      <!-- Data Grid - Right Side -->
+    <mat-card class="grid-card">
+      <mat-card-header>
+        <mat-card-title>Test Results ({{totalResults}} results)</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-data-table
+          [data]="tableData"
+          [config]="tableConfig"
+          (rowClick)="selectRow($event)"
+          (selectionChange)="onSelectionChange($event)"
+          (pageChange)="onPageChange($event)">
+        </app-data-table>
+      </mat-card-content>
+    </mat-card>
+    <!-- Details Panel - Left Side -->
+    <mat-card class="details-card" *ngIf="selectedResult">
+      <mat-card-header>
+        <mat-card-title>Trainee Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="trainee-details">
+          
+          <!-- Personal Information -->
+          <div class="details-section">
+            <h3>Personal Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">Trainee ID:</span>
+              <span class="detail-value">{{selectedResult.traineeId}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Trainee Name:</span>
+              <span class="detail-value">{{selectedResult.traineeName}}</span>
+            </div>
+          </div>
+
+          <!-- Academic Information -->
+          <div class="details-section">
+            <h3>Academic Information</h3>
+            <div class="detail-row">
+              <span class="detail-label">Subject:</span>
+              <span class="detail-value">{{selectedResult.subject}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Grade:</span>
+              <span class="detail-value" [class]="selectedResult.grade | gradeClass">
+                {{selectedResult.grade}}
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Test Date:</span>
+              <span class="detail-value">{{selectedResult.testDate | date:'dd/MM/yyyy'}}</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="details-actions">
+            <button mat-raised-button color="primary" (click)="editTrainee()">
+              <mat-icon>edit</mat-icon>
+              Edit Details
+            </button>
+            
+            <button mat-stroked-button color="warn" (click)="removeTestResult()">
+              <mat-icon>delete</mat-icon>
+              Delete Test Result
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  
+
+  </div>
+</div>

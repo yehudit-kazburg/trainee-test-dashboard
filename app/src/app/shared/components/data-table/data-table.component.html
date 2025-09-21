@@ -1,0 +1,100 @@
+<mat-card class="data-table-container">
+  <mat-card-header *ngIf="config.title">
+    <mat-card-title>{{ config.title }}</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <!-- Search Bar -->
+    <div class="table-controls" *ngIf="config.showSearch">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>{{ config.searchPlaceholder || 'Search...' }}</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="{{ config.searchPlaceholder || 'Search...' }}">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+        <!-- Selection Column -->
+        <ng-container matColumnDef="select" *ngIf="config.showSelection">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox 
+              (change)="masterToggle()"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox 
+              (click)="$event.stopPropagation()"
+              (change)="onSelectionChange(row, $event)"
+              [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Data Columns -->
+        <ng-container *ngFor="let column of config.columns" [matColumnDef]="column.key">
+          <th mat-header-cell 
+              *matHeaderCellDef 
+              [style.width]="column.width">
+            {{ column.label }}
+          </th>
+          <td mat-cell 
+              *matCellDef="let element" 
+              [ngClass]="getCellClass(element, column)"
+              (click)="onRowClick(element)">
+            <ng-container [ngSwitch]="column.type">
+              <!-- Grade Type -->
+              <span *ngSwitchCase="'grade'" 
+                    [ngClass]="element[column.key] | gradeClass">
+                {{ element[column.key] }}
+              </span>
+              
+              <!-- Date Type -->
+              <span *ngSwitchCase="'date'">
+                {{ element[column.key] | date:'dd/MM/yyyy' }}
+              </span>
+              
+              <!-- Number Type -->
+              <span *ngSwitchCase="'number'">
+                {{ element[column.key] | number }}
+              </span>
+              
+              <!-- Default Text Type -->
+              <span *ngSwitchDefault>
+                {{ element[column.key] }}
+              </span>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row 
+            *matRowDef="let row; columns: displayedColumns;"
+            [ngClass]="getRowClass(row)"
+            (click)="onRowClick(row)">
+        </tr>
+      </table>
+
+      <!-- No Data State -->
+      <div class="empty-state" *ngIf="dataSource.data.length === 0">
+        <mat-icon>inbox</mat-icon>
+        <div class="empty-title">No Data Available</div>
+        <div class="empty-message">No records match your current filters.</div>
+      </div>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator 
+      *ngIf="config.showPagination"
+      #paginator
+      [pageSizeOptions]="config.pageSizeOptions || [5, 10, 20]"
+      [pageSize]="config.pageSize || 10"
+      showFirstLastButtons
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

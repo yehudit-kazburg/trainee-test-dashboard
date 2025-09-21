@@ -1,0 +1,81 @@
+<div class="analysis-page-container">
+  <h1>Data Analysis Dashboard</h1>
+  
+  <!-- Filter Controls -->
+  <div class="controls-section">
+    <app-filter-controls
+      title="Chart Filters"
+      [filterConfigs]="filterConfigs"
+      [(filterValues)]="filterValues"
+      (filtersChanged)="onFiltersChanged($event)">
+    </app-filter-controls>
+  </div>
+
+  <!-- Charts Display Area -->
+  <div class="charts-container">
+    <div class="visible-charts" cdkDropList #visibleList="cdkDropList" [cdkDropListData]="visibleCharts" 
+         cdkDropListConnectedTo="hiddenList" (cdkDropListDropped)="drop($event)">
+      
+      <div *ngFor="let chart of visibleCharts" cdkDrag class="chart-card">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>drag_handle</mat-icon>
+              {{chart.title}}
+            </mat-card-title>
+            <mat-card-subtitle>{{chart.data.length}} data points</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="chart-area">
+              <div class="chart-placeholder">
+                <mat-icon>{{chart.type === 'line' ? 'show_chart' : chart.type === 'bar' ? 'bar_chart' : 'pie_chart'}}</mat-icon>
+                <h3>{{chart.title}}</h3>
+                <div class="chart-data" *ngIf="chart.data.length > 0">
+                  <div *ngFor="let item of chart.data.slice(0, 5)" class="data-item">
+                    <span>{{item.name}}: {{item.value}}</span>
+                    <span *ngIf="item.average" class="average">(Avg: {{item.average}})</span>
+                  </div>
+                  <div *ngIf="chart.data.length > 5" class="more-data">
+                    +{{chart.data.length - 5}} more items...
+                  </div>
+                </div>
+                <div *ngIf="chart.data.length === 0" class="no-data">
+                  No data available with current filters
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Charts Section -->
+  <div class="hidden-charts-section" *ngIf="hiddenCharts.length > 0">
+    <h2>Available Charts</h2>
+    <div class="hidden-charts" cdkDropList #hiddenList="cdkDropList" [cdkDropListData]="hiddenCharts" 
+         cdkDropListConnectedTo="visibleList" (cdkDropListDropped)="drop($event)">
+      
+      <div *ngFor="let chart of hiddenCharts" cdkDrag class="chart-card hidden">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>drag_handle</mat-icon>
+              {{chart.title}}
+            </mat-card-title>
+            <mat-card-subtitle>Drag to display above</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="chart-area">
+              <div class="chart-placeholder">
+                <mat-icon>{{chart.type === 'pie' ? 'pie_chart' : 'bar_chart'}}</mat-icon>
+                <p>{{chart.title}}</p>
+                <small>{{chart.data.length}} items ready</small>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

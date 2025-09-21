@@ -1,0 +1,293 @@
+.data-page-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  
+  h1 {
+    margin: 0;
+    color: #1976d2;
+    font-weight: 500;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-card {
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.main-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.details-card {
+  flex: 0 0 350px; // Fixed width for details panel
+  min-height: 600px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  order: -1; // Show on the left side
+  
+  .mat-mdc-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .edit-button {
+      margin-left: 8px;
+    }
+  }
+}
+
+.trainee-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.details-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  
+  h3 {
+    margin: 0 0 12px 0;
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 16px;
+    border-bottom: 1px solid #e3f2fd;
+    padding-bottom: 6px;
+  }
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eeeeee;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #666;
+  min-width: 120px;
+  text-align: left;
+}
+
+.detail-value {
+  font-weight: 400;
+  color: #333;
+  text-align: left;
+  flex: 1;
+  margin-left: 12px;
+}
+
+.details-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  
+  button {
+    width: 100%;
+    
+    mat-icon {
+      margin-left: 8px;
+    }
+  }
+}
+
+.grid-card {
+  flex: 1; // Take remaining space
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.table-container {
+  max-height: 500px;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: white;
+}
+
+.full-width-table {
+  width: 100%;
+  
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    vertical-align: middle;
+  }
+  
+  th {
+    background: #f5f5f5;
+    font-weight: 500;
+    color: #1976d2;
+    border-bottom: 2px solid #e0e0e0;
+  }
+  
+  td {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: #f0f0f0;
+    }
+    
+    &.selected {
+      background-color: #e3f2fd;
+      border-left: 4px solid #1976d2;
+    }
+  }
+  
+  // Specific column alignments
+  .mat-column-id {
+    text-align: center;
+    width: 100px;
+    font-weight: 500;
+  }
+  
+  .mat-column-name {
+    min-width: 180px;
+    font-weight: 500;
+  }
+  
+  .mat-column-subject {
+    min-width: 120px;
+  }
+  
+  .mat-column-grade {
+    text-align: center;
+    width: 80px;
+    font-weight: 600;
+  }
+  
+  .mat-column-date {
+    text-align: center;
+    width: 120px;
+  }
+}
+
+.grade-excellent {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.grade-good {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.grade-poor {
+  color: #f44336;
+  font-weight: 600;
+}
+
+.details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.mat-mdc-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin: -16px -16px 16px -16px;
+  padding: 16px;
+  
+  .mat-mdc-card-title {
+    color: white;
+    margin: 0;
+  }
+}
+
+// Hebrew RTL Support
+.mat-form-field {
+  direction: rtl;
+}
+
+.mat-table {
+  direction: rtl;
+}
+
+mat-paginator {
+  direction: rtl;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .data-page-container {
+    padding: 10px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  .main-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .details-card {
+    flex: none;
+    width: 100%;
+    order: 0; // Show on top on mobile
+  }
+  
+  .grid-card {
+    flex: none;
+    width: 100%;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+    
+    button {
+      width: 100%;
+    }
+  }
+}

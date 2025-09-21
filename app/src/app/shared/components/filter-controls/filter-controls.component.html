@@ -1,0 +1,121 @@
+<mat-card class="filter-card">
+  <mat-card-header>
+    <mat-card-title>{{ title || 'Filters' }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="controls-row">
+      <ng-container *ngFor="let filter of filterConfigs">
+        <!-- Text Filter -->
+        <mat-form-field *ngIf="filter.type === 'text'" appearance="outline">
+          <mat-label>{{ filter.label }}</mat-label>
+          <input 
+            matInput 
+            [placeholder]="filter.placeholder || ''"
+            [(ngModel)]="filterValues[filter.key]"
+            (ngModelChange)="onFilterChange()">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <!-- Single Select Filter -->
+        <mat-form-field *ngIf="filter.type === 'select'" appearance="outline">
+          <mat-label>{{ filter.label }}</mat-label>
+          <mat-select 
+            [(ngModel)]="filterValues[filter.key]"
+            (selectionChange)="onFilterChange()">
+            <mat-option value="">All</mat-option>
+            <mat-option 
+              *ngFor="let option of filter.options" 
+              [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Multi Select Filter -->
+        <mat-form-field *ngIf="filter.type === 'multi-select'" appearance="outline">
+          <mat-label>{{ filter.label }}</mat-label>
+          <mat-select 
+            multiple
+            [(ngModel)]="filterValues[filter.key]"
+            (selectionChange)="onFilterChange()">
+            <mat-option 
+              *ngFor="let option of filter.options" 
+              [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Date Range Filter -->
+        <div *ngIf="filter.type === 'date-range'" class="date-range-filter">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ filter.label }} - From</mat-label>
+            <input 
+              matInput 
+              [matDatepicker]="fromPicker"
+              [(ngModel)]="filterValues[filter.key + '_from']"
+              (ngModelChange)="onFilterChange()">
+            <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromPicker></mat-datepicker>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>{{ filter.label }} - To</mat-label>
+            <input 
+              matInput 
+              [matDatepicker]="toPicker"
+              [(ngModel)]="filterValues[filter.key + '_to']"
+              (ngModelChange)="onFilterChange()">
+            <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+            <mat-datepicker #toPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Number Range Filter -->
+        <div *ngIf="filter.type === 'number-range'" class="number-range-filter">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ filter.label }} - Min</mat-label>
+            <input 
+              matInput 
+              type="number"
+              [min]="filter.min || null"
+              [max]="filter.max || null"
+              [(ngModel)]="filterValues[filter.key + '_min']"
+              (ngModelChange)="onFilterChange()">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>{{ filter.label }} - Max</mat-label>
+            <input 
+              matInput 
+              type="number"
+              [min]="filter.min || null"
+              [max]="filter.max || null"
+              [(ngModel)]="filterValues[filter.key + '_max']"
+              (ngModelChange)="onFilterChange()">
+          </mat-form-field>
+        </div>
+
+        <!-- Checkbox Filter -->
+        <div *ngIf="filter.type === 'checkbox'" class="checkbox-filter">
+          <mat-checkbox 
+            [(ngModel)]="filterValues[filter.key]"
+            (ngModelChange)="onFilterChange()">
+            {{ filter.label }}
+          </mat-checkbox>
+        </div>
+      </ng-container>
+
+      <div class="filter-buttons">
+        <button mat-raised-button color="primary" (click)="onApplyFilters()">
+          <mat-icon>filter_list</mat-icon>
+          Apply Filters
+        </button>
+        <button mat-button (click)="onClearFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,117 @@
+<div class="monitor-page-container">
+  <h1>Student Monitoring Dashboard</h1>
+  
+  <!-- Filter Section -->
+  <app-filter-controls
+    title="Filters & Search"
+    [filterConfigs]="filterConfigs"
+    [(filterValues)]="filterValues"
+    (filtersChanged)="onFiltersChanged($event)">
+  </app-filter-controls>
+
+  <!-- Results Summary -->
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-content">
+          <mat-icon>people</mat-icon>
+          <div>
+            <h3>{{filteredData.length}}</h3>
+            <p>Total Students</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="summary-card passed">
+      <mat-card-content>
+        <div class="summary-content">
+          <mat-icon>check_circle</mat-icon>
+          <div>
+            <h3>{{(filteredData | filter: {status: 'Passed'}).length}}</h3>
+            <p>Passed</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="summary-card failed">
+      <mat-card-content>
+        <div class="summary-content">
+          <mat-icon>error</mat-icon>
+          <div>
+            <h3>{{(filteredData | filter: {status: 'Failed'}).length}}</h3>
+            <p>Failed</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Results Table -->
+  <mat-card class="results-table">
+    <mat-card-header>
+      <mat-card-title>Student Performance Overview</mat-card-title>
+      <mat-card-subtitle>{{filteredData.length}} students found</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table mat-table [dataSource]="filteredData" class="full-width-table">
+        
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let element">{{element.id}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="average">
+          <th mat-header-cell *matHeaderCellDef>Average Grade</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="grade-badge" [ngClass]="{'high': element.average >= 85, 'medium': element.average >= 60 && element.average < 85, 'low': element.average < 60}">
+              {{element.average}}%
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="status-chip" [ngClass]="element.status.toLowerCase()">
+              <mat-icon>{{element.status === 'Passed' ? 'check_circle' : 'error'}}</mat-icon>
+              {{element.status}}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalTests">
+          <th mat-header-cell *matHeaderCellDef>Tests</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="test-count">
+              {{element.passedTests}}/{{element.totalTests}}
+              <small>({{element.totalTests > 0 ? ((element.passedTests / element.totalTests) * 100 | number:'1.0-0') : 0}}%)</small>
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastTestDate">
+          <th mat-header-cell *matHeaderCellDef>Last Test</th>
+          <td mat-cell *matCellDef="let element">{{element.lastTestDate}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+            [ngClass]="{'passed-row': row.status === 'Passed', 'failed-row': row.status === 'Failed'}"></tr>
+        
+      </table>
+      
+      <div *ngIf="filteredData.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <h3>No students found</h3>
+        <p>Try adjusting your filters to see more results.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

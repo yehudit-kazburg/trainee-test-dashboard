@@ -1,0 +1,184 @@
+.analysis-page-container {
+  padding: 20px;
+}
+
+.controls-section {
+  margin-bottom: 24px;
+}
+
+.controls-row {
+  display: flex;
+  gap: 16px;
+  
+  mat-form-field {
+    min-width: 200px;
+  }
+}
+
+// Charts container styling
+.charts-container {
+  margin: 20px 0;
+  min-height: 400px;
+}
+
+.visible-charts, .hidden-charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-height: 200px;
+  padding: 16px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.chart-card {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  cursor: move;
+  
+  &.hidden {
+    opacity: 0.7;
+    
+    mat-card {
+      background-color: #f0f0f0;
+    }
+  }
+  
+  mat-card {
+    height: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+  
+  mat-card-header {
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      mat-icon {
+        color: #666;
+        cursor: grab;
+      }
+    }
+  }
+}
+
+.chart-area {
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-placeholder {
+  text-align: center;
+  width: 100%;
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #2196F3;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 8px 0;
+    color: #333;
+  }
+}
+
+.chart-data {
+  margin-top: 16px;
+  text-align: left;
+  max-width: 300px;
+  
+  .data-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid #eee;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .average {
+      color: #666;
+      font-size: 0.9em;
+    }
+  }
+  
+  .more-data {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-top: 8px;
+  }
+}
+
+.no-data {
+  color: #999;
+  font-style: italic;
+}
+
+.hidden-charts-section {
+  margin-top: 32px;
+  
+  h2 {
+    margin-bottom: 16px;
+    color: #666;
+  }
+}
+
+// CDK Drag and Drop animations
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.visible-charts.cdk-drop-list-dragging,
+.hidden-charts.cdk-drop-list-dragging {
+  border-color: #2196F3;
+  background-color: #e3f2fd;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: rotate(5deg);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .chart-card {
+    min-width: 100%;
+  }
+  
+  .visible-charts, .hidden-charts {
+    flex-direction: column;
+  }
+}
+
+.draggable-chart:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .controls-row {
+    flex-direction: column;
+  }
+}
