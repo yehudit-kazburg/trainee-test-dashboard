@@ -137,16 +137,14 @@ export class AnalysisPage implements OnInit, OnDestroy {
           idsFilter.options = idOptions;
         }
       });
-    // Note: Subject options are updated separately in updateSubjectsFilterOptions()
   }
 
   onFiltersChanged(values: FilterValues): void {
-    // Update legacy properties 
     this.selectedIds = values['selectedIds'] || [];
     this.selectedSubjects = values['selectedSubjects'] || [];
     
     this.updateChartsData();
-    this.saveCurrentState(); // Save state when filters change
+    this.saveCurrentState(); 
   }
   
   loadAvailableIds(): void {
@@ -159,19 +157,15 @@ export class AnalysisPage implements OnInit, OnDestroy {
   }
 
   loadAvailableSubjects(): void {
-    console.log('AnalysisPage: Loading available subjects...');
     this.dataService.getSubjects()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((subjects: string[]) => {
-        console.log('AnalysisPage: Loaded subjects:', subjects);
         this.availableSubjects = subjects;
-        // Update filter options after subjects are loaded
         this.updateSubjectsFilterOptions();
       });
   }
 
   private updateSubjectsFilterOptions(): void {
-    console.log('AnalysisPage: Updating subjects filter options with:', this.availableSubjects);
     const subjectOptions = this.availableSubjects.map(subject => ({
       value: subject,
       label: subject
@@ -180,7 +174,6 @@ export class AnalysisPage implements OnInit, OnDestroy {
     const subjectsFilter = this.filterConfigs.find(f => f.key === 'selectedSubjects');
     if (subjectsFilter) {
       subjectsFilter.options = subjectOptions;
-      console.log('AnalysisPage: Subject filter updated with options:', subjectOptions);
     }
   }
   

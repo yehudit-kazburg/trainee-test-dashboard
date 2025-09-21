@@ -39,3 +39,30 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Global container styles to ensure full width */
+* {
+  box-sizing: border-box;
+}
+
+html, body, app-root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure all main containers use full width */
+.mat-app-background {
+  width: 100%;
+}
+
+/* Remove any default Material UI container constraints */
+.mat-toolbar, .mat-card, .mat-table {
+  width: 100%;
+}
+
+/* Force containers to use full width */
+app-data-page, app-analysis-page, app-monitor-page {
+  display: block;
+  width: 100%;
+}

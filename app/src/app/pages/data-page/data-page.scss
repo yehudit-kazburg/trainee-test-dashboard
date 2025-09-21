@@ -1,7 +1,6 @@
 .data-page-container {
   padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .page-header {
@@ -25,12 +24,14 @@
 .filter-card {
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
 }
 
 .main-content {
   display: flex;
   gap: 20px;
   align-items: flex-start;
+  width: 100%;
 }
 
 .details-card {
@@ -118,6 +119,7 @@
 .grid-card {
   flex: 1; // Take remaining space
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
 }
 
 .full-width {
