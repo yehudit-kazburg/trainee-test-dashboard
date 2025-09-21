@@ -1,0 +1,64 @@
+.trainee-form {
+  .form-section {
+    margin-bottom: 24px;
+    
+    h3 {
+      margin: 0 0 16px 0;
+      color: #1976d2;
+      font-weight: 500;
+      font-size: 16px;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    mat-form-field {
+      flex: 1;
+      
+      &.readonly-field {
+        .mat-mdc-form-field-input-control input {
+          background-color: #f5f5f5;
+          cursor: not-allowed;
+          color: #666;
+        }
+        
+        .mat-mdc-form-field-label {
+          color: #999 !important;
+        }
+        
+        .mat-mdc-form-field-hint {
+          color: #666;
+          font-style: italic;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+
+    button {
+      min-width: 100px;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column-reverse;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
