@@ -167,19 +167,35 @@ export class DataPage implements OnInit, OnDestroy {
           name: result.name,
           email: result.email,
           registrationDate: result.dateJoined
+        }).subscribe({
+          next: (newTrainee) => {
+            console.log('Trainee added successfully:', newTrainee);
+            
+            if (result.grade !== undefined && result.date && result.subject) {
+              this.dataService.addTestResult({
+                traineeId: newTrainee.id, // Use the actual ID from the created trainee
+                traineeName: result.name,
+                subject: result.subject,
+                grade: result.grade,
+                testDate: result.date
+              }).subscribe({
+                next: () => {
+                  console.log('Test result added successfully');
+                  this.loadData(); 
+                },
+                error: (error) => {
+                  console.error('Failed to add test result:', error);
+                  this.loadData(); // Still refresh the data
+                }
+              });
+            } else {
+              this.loadData(); 
+            }
+          },
+          error: (error) => {
+            console.error('Failed to add trainee:', error);
+          }
         });
-        
-        if (result.grade !== undefined && result.date && result.subject) {
-          this.dataService.addTestResult({
-            traineeId: newTraineeId,
-            traineeName: result.name,
-            subject: result.subject,
-            grade: result.grade,
-            testDate: result.date
-          });
-        }
-        
-        this.loadData(); 
       }
     });
   }

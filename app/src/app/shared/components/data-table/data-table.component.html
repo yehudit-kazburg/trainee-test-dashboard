@@ -41,8 +41,7 @@
         <!-- Table Header and Rows -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row 
-            *matRowDef="let row; columns: displayedColumns;"
-            [class.selected-row]="selectedRow === row"
+            *matRowDef="let row; columns: displayedColumns; trackBy: trackByFn;"
             [ngClass]="getRowClass(row)"
             (click)="onRowClick(row)">
         </tr>
